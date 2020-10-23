@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private GameObject PanelStart;
     [SerializeField]
     private GameObject PanelEnD;
+    [SerializeField]
+    private GameObject PanelWin;
     private void Start()
     {
         Time.timeScale = 0;
@@ -26,4 +28,10 @@ public class GameManager : MonoBehaviour
    {
         SceneManager.LoadScene("Game");
    }
+
+    public void WintGame()
+    {
+        Time.timeScale = 0;
+        PanelWin.SetActive(true);
+    }
 }

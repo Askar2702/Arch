@@ -7,7 +7,8 @@ public class Enemystill : BaseEnemy
     // Start is called before the first frame update
     protected override void Start()
     {
-        this.Player = GameObject.FindGameObjectWithTag("Player");
+        this.Player = GameObject.FindGameObjectWithTag("Player"); 
+        Player.GetComponent<PlayerManager>().AddEnemy(this.gameObject);
         InvokeRepeating("projectile", TimeStart, interval);
     }
 

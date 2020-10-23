@@ -29,20 +29,23 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private GameObject target;
     private Vector3 Move;
-    GameObject[] targets;
+    [SerializeField]
+    private List<GameObject> targets = new List<GameObject>();
     [SerializeField]
     private UnityEvent Death;
+    [SerializeField]
+    private UnityEvent Win;
 
 
     void Start()
     {
         HealthSlider.value = health;
-        targets = GameObject.FindGameObjectsWithTag("Enemy");
         target = gameObject;
     }
     private void Update()
     {
         float DistancetoClosesEnemy = Mathf.Infinity;
+        if (targets.Count == 0) return;
         foreach (GameObject currentEnemy in targets)
         {
             float DistanceEnemy = (currentEnemy.transform.position - this.transform.position).sqrMagnitude;
@@ -72,7 +75,7 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+        if (!target) return;
         if (Joystick.isJoystick)
         {
             Move = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal") * Speed, 0f, CrossPlatformInputManager.GetAxis("Vertical") * Speed);
@@ -99,10 +102,22 @@ public class PlayerManager : MonoBehaviour
     }
     public void projectile()
     {
+        if (!target) return;
         if (!Joystick.isJoystick)
         {
             GameObject Bullet = Instantiate(bullet, startBullet.position, startBullet.rotation);
             Bullet.GetComponent<Rigidbody>().AddForce(startBullet.transform.forward * forseBullet, ForceMode.VelocityChange);
         }
+    }
+
+    public void AddEnemy(GameObject enemy)
+    {
+        targets.Add(enemy);
+    }
+    public void RemoveEnemy(GameObject enemy)
+    {
+        targets.Remove(enemy);
+        if (targets.Count == 0)
+            Win.Invoke();
     }
 }

@@ -36,8 +36,9 @@ public class BaseEnemy : MonoBehaviour
     protected virtual void Start()
     {
         this.Player = GameObject.FindGameObjectWithTag("Player");
+        Player.GetComponent<PlayerManager>().AddEnemy(this.gameObject);
         InvokeRepeating("projectile", TimeStart, interval);
-        InvokeRepeating("RandomMove", 1, 2f);
+        InvokeRepeating("RandomMove", 1, 1f);
     }
 
     // Update is called once per frame
@@ -91,6 +92,11 @@ public class BaseEnemy : MonoBehaviour
     {
         health -= amount;
         HealthSlider.value = health;
-        
+        if (health <= 0)
+        {
+            Player.GetComponent<PlayerManager>().RemoveEnemy(this.gameObject);
+            Destroy(this.gameObject);
+        }
+
     }
 }
